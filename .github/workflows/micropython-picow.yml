@@ -1,10 +1,10 @@
 name: MicroPython
 
 on:
-  # push:
-  # pull_request:
-  # release:
-  #   types: [created]
+  push:
+  pull_request:
+  release:
+    types: [created]
 
 env:
   MICROPYTHON_VERSION: 9dfabcd6d3d080aced888e8474e921f11dc979bb
