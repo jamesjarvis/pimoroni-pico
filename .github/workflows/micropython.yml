@@ -1,10 +1,10 @@
 name: MicroPython
 
 on:
-  push:
-  pull_request:
-  release:
-    types: [created]
+  # push:
+  # pull_request:
+  # release:
+  #   types: [created]
 
 env:
   MICROPYTHON_VERSION: v1.19
