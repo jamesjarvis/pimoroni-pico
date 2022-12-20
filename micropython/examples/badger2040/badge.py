@@ -20,12 +20,12 @@ LEFT_PADDING = 5
 NAME_PADDING = 20
 DETAIL_SPACING = 10
 
-DEFAULT_TEXT = """mustelid inc
-H. Badger
-RP2040
-2MB Flash
-E ink
-296x128px"""
+DEFAULT_TEXT = """Roslin Institute
+Dr. Rebecca Smith
+PhD
+
+Bioinformatics
+"""
 
 BADGE_IMAGE = bytearray(int(IMAGE_WIDTH * HEIGHT / 8))
 
@@ -33,9 +33,9 @@ try:
     open("badge-image.bin", "rb").readinto(BADGE_IMAGE)
 except OSError:
     try:
-        import badge_image
-        BADGE_IMAGE = bytearray(badge_image.data())
-        del badge_image
+        import rebeccca
+        BADGE_IMAGE = bytearray(rebecca.data())
+        del rebecca
     except ImportError:
         pass
 
