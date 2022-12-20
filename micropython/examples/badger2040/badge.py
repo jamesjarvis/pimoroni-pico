@@ -33,7 +33,7 @@ try:
     open("badge-image.bin", "rb").readinto(BADGE_IMAGE)
 except OSError:
     try:
-        import rebeccca
+        import rebecca
         BADGE_IMAGE = bytearray(rebecca.data())
         del rebecca
     except ImportError:
