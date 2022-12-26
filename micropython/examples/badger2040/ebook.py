@@ -326,7 +326,9 @@ display = badger2040.Badger2040()
 display.led(128)
 display.update_speed(badger2040.UPDATE_FAST)
 
+
 def display_random_quote():
+    display.clear()
     # Open the book file
     quotes = open(text_file, "r")
 
@@ -361,7 +363,7 @@ def display_random_quote():
         row += 1
     display.update()
 
-
+# Main program loop
 changed = True
 while True:
     if display.pressed(badger2040.BUTTON_A):
