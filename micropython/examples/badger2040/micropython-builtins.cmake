@@ -36,7 +36,6 @@ function (copy_module TARGET SRC DST)
 endfunction()
 
 convert_image(usermod_badger2040 badge_image)
-convert_image(usermod_badger2040 rebecca)
 convert_image(usermod_badger2040 badgerpunk)
 convert_image(usermod_badger2040 launchericons)
 

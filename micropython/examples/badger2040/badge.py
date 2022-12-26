@@ -33,9 +33,9 @@ try:
     open("badge-image.bin", "rb").readinto(BADGE_IMAGE)
 except OSError:
     try:
-        import rebecca
-        BADGE_IMAGE = bytearray(rebecca.data())
-        del rebecca
+        import badge_image
+        BADGE_IMAGE = bytearray(badge_image.data())
+        del badge_image
     except ImportError:
         pass
 
