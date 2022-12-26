@@ -16,10 +16,10 @@ except OSError:
         # pre-populate with Quotes.
         import quotes
         with open(text_file, "wb") as f:
-            f.write(witw.data())
+            f.write(quotes.data())
             f.flush()
             time.sleep(0.1)
-        del witw
+        del quotes
     except ImportError:
         pass
 
@@ -114,7 +114,7 @@ def render_page():
     latest_line = ""
     for word in words:
         latest_line_length = display.measure_text(latest_line, state["text_size"])
-        if appended_length >= TEXT_WIDTH:
+        if latest_line_length >= TEXT_WIDTH:
             lines.append(latest_line)
             latest_line = ""
         latest_line += word
@@ -126,7 +126,7 @@ def render_page():
         display.pen(0)
         display.thickness(FONT_THICKNESSES[0])
         display.text(line, TEXT_PADDING, (row * text_spacing) + (text_spacing // 2) + TEXT_PADDING, state["text_size"])
-        row+=1
+        row +=1
 
     display.update()
 
@@ -237,7 +237,7 @@ while True:
             else:
                 quotes.seek(0)
                 for i in range(state["current_quote"]):
-                    quotes.readline() # Go back to the line.
+                    quotes.readline()  # Go back to the line.
             changed = True
 
     if display.pressed(badger2040.BUTTON_A):
