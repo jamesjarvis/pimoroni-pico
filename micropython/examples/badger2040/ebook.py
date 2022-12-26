@@ -278,7 +278,6 @@
 
 import badger2040
 import gc
-import badger_os
 import json
 import time
 import random
@@ -363,6 +362,7 @@ def display_random_quote():
         display.text(line, TEXT_PADDING, (row * text_spacing) + (text_spacing // 2) + TEXT_PADDING, TEXT_SIZE)
         row += 1
     display.update()
+
 
 # Main program loop
 changed = True
