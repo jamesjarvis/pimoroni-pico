@@ -328,6 +328,7 @@ display.update_speed(badger2040.UPDATE_NORMAL)
 
 
 def display_random_quote():
+    display.pen(15)
     display.clear()
     # Open the book file
     quotes = open(text_file, "r")
