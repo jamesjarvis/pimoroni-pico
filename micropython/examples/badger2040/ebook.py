@@ -126,7 +126,7 @@ def render_page():
         display.pen(0)
         display.thickness(FONT_THICKNESSES[0])
         display.text(line, TEXT_PADDING, (row * text_spacing) + (text_spacing // 2) + TEXT_PADDING, state["text_size"])
-        row +=1
+        row += 1
 
     display.update()
 
