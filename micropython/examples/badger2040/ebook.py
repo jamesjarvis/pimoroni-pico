@@ -2,9 +2,10 @@ import badger2040
 import time
 import gc
 import badger_os
+import json
 
 # **** Put the name of your text file here *****
-text_file = "book.txt"  # File must be on the MicroPython device
+text_file = "quotes.txt"  # File must be on the MicroPython device
 
 
 try:
@@ -12,8 +13,8 @@ try:
 except OSError:
     try:
         # If the specified file doesn't exist,
-        # pre-populate with Wind In The Willows
-        import witw
+        # pre-populate with Quotes.
+        import quotes
         with open(text_file, "wb") as f:
             f.write(witw.data())
             f.flush()
@@ -70,7 +71,7 @@ def draw_frame():
     display.rectangle(WIDTH - ARROW_WIDTH, 0, ARROW_WIDTH, HEIGHT)
     display.pen(0)
     display.thickness(ARROW_THICKNESS)
-    if state["current_page"] > 0:
+    if state["current_quote"] > 0:
         draw_up(WIDTH - ARROW_WIDTH, (HEIGHT // 4) - (ARROW_HEIGHT // 2),
                 ARROW_WIDTH, ARROW_HEIGHT, ARROW_THICKNESS, ARROW_PADDING)
     draw_down(WIDTH - ARROW_WIDTH, ((HEIGHT * 3) // 4) - (ARROW_HEIGHT // 2),
@@ -83,11 +84,9 @@ def draw_frame():
 
 # Global variables
 state = {
-    "last_offset": 0,
-    "current_page": 0,
+    "current_quote": 0,
     "font_idx": 0,
     "text_size": 0.5,
-    "offsets": []
 }
 badger_os.state_load("ebook", state)
 
@@ -105,91 +104,108 @@ display.update_speed(badger2040.UPDATE_FAST)
 # ------------------------------
 
 def render_page():
-    row = 0
-    line = ""
-    pos = ebook.tell()
-    next_pos = pos
-    add_newline = False
+    lines = []
     display.font(FONTS[state["font_idx"]])
 
-    while True:
-        # Read a full line and split it into words
-        words = ebook.readline().split(" ")
+    current_quote_json = json.load(quotes.readline())
+    # Read a full line and split it into words.
+    words = current_quote_json["content"].split(" ")
 
-        # Take the length of the first word and advance our position
-        next_word = words[0]
-        if len(words) > 1:
-            next_pos += len(next_word) + 1
-        else:
-            next_pos += len(next_word)  # This is the last word on the line
+    latest_line = ""
+    for word in words:
+        latest_line_length = display.measure_text(latest_line, state["text_size"])
+        if appended_length >= TEXT_WIDTH:
+            lines.append(latest_line)
+            latest_line = ""
+        latest_line += word
 
-        # Advance our position further if the word contains special characters
-        if '\u201c' in next_word:
-            next_word = next_word.replace('\u201c', '\"')
-            next_pos += 2
-        if '\u201d' in next_word:
-            next_word = next_word.replace('\u201d', '\"')
-            next_pos += 2
-        if '\u2019' in next_word:
-            next_word = next_word.replace('\u2019', '\'')
-            next_pos += 2
+    lines.append(latest_line)
 
-        # Rewind the file back from the line end to the start of the next word
-        ebook.seek(next_pos)
+    row = 0
+    for line in lines:
+        display.pen(0)
+        display.thickness(FONT_THICKNESSES[0])
+        display.text(line, TEXT_PADDING, (row * text_spacing) + (text_spacing // 2) + TEXT_PADDING, state["text_size"])
+        row+=1
 
-        # Strip out any new line characters from the word
-        next_word = next_word.strip()
+    display.update()
 
-        # If an empty word is encountered assume that means there was a blank line
-        if len(next_word) == 0:
-            add_newline = True
+    # while True:
+    #     current_quote_json = json.load(quotes.readline())
+    #     # Read a full line and split it into words.
+    #     words = current_quote_json["content"].split(" ")
 
-        # Append the word to the current line and measure its length
-        appended_line = line
-        if len(line) > 0 and len(next_word) > 0:
-            appended_line += " "
-        appended_line += next_word
-        appended_length = display.measure_text(appended_line, state["text_size"])
+    #     # Take the length of the first word and advance our position
+    #     next_word = words[0]
+    #     if len(words) > 1:
+    #         next_pos += len(next_word) + 1
+    #     else:
+    #         next_pos += len(next_word)  # This is the last word on the line
 
-        # Would this appended line be longer than the text display area, or was a blank line spotted?
-        if appended_length >= TEXT_WIDTH or add_newline:
+    #     # Advance our position further if the word contains special characters
+    #     if '\u201c' in next_word:
+    #         next_word = next_word.replace('\u201c', '\"')
+    #         next_pos += 2
+    #     if '\u201d' in next_word:
+    #         next_word = next_word.replace('\u201d', '\"')
+    #         next_pos += 2
+    #     if '\u2019' in next_word:
+    #         next_word = next_word.replace('\u2019', '\'')
+    #         next_pos += 2
 
-            # Yes, so write out the line prior to the append
-            print(line)
-            display.pen(0)
-            display.thickness(FONT_THICKNESSES[0])
-            display.text(line, TEXT_PADDING, (row * text_spacing) + (text_spacing // 2) + TEXT_PADDING, state["text_size"])
+    #     # Strip out any new line characters from the word
+    #     next_word = next_word.strip()
 
-            # Clear the line and move on to the next row
-            line = ""
-            row += 1
+    #     # If an empty word is encountered assume that means there was a blank line
+    #     if len(next_word) == 0:
+    #         add_newline = True
 
-            # Have we reached the end of the page?
-            if (row * text_spacing) + text_spacing >= HEIGHT:
-                print("+++++")
-                display.update()
+    #     # Append the word to the current line and measure its length
+    #     appended_line = line
+    #     if len(line) > 0 and len(next_word) > 0:
+    #         appended_line += " "
+    #     appended_line += next_word
+    #     appended_length = display.measure_text(appended_line, state["text_size"])
 
-                # Reset the position to the start of the word that made this line too long
-                ebook.seek(pos)
-                return
-            else:
-                # Set the line to the word and advance the current position
-                line = next_word
-                pos = next_pos
+    #     # Would this appended line be longer than the text display area, or was a blank line spotted?
+    #     if appended_length >= TEXT_WIDTH or add_newline:
 
-            # A new line was spotted, so advance a row
-            if add_newline:
-                print("")
-                row += 1
-                if (row * text_spacing) + text_spacing >= HEIGHT:
-                    print("+++++")
-                    display.update()
-                    return
-                add_newline = False
-        else:
-            # The appended line was not too long, so set it as the line and advance the current position
-            line = appended_line
-            pos = next_pos
+    #         # Yes, so write out the line prior to the append
+    #         print(line)
+    #         display.pen(0)
+    #         display.thickness(FONT_THICKNESSES[0])
+    #         display.text(line, TEXT_PADDING, (row * text_spacing) + (text_spacing // 2) + TEXT_PADDING, state["text_size"])
+
+    #         # Clear the line and move on to the next row
+    #         line = ""
+    #         row += 1
+
+    #         # Have we reached the end of the page?
+    #         if (row * text_spacing) + text_spacing >= HEIGHT:
+    #             print("+++++")
+    #             display.update()
+
+    #             # Reset the position to the start of the word that made this line too long
+    #             quotes.seek(pos)
+    #             return
+    #         else:
+    #             # Set the line to the word and advance the current position
+    #             line = next_word
+    #             pos = next_pos
+
+    #         # A new line was spotted, so advance a row
+    #         if add_newline:
+    #             print("")
+    #             row += 1
+    #             if (row * text_spacing) + text_spacing >= HEIGHT:
+    #                 print("+++++")
+    #                 display.update()
+    #                 return
+    #             add_newline = False
+    #     else:
+    #         # The appended line was not too long, so set it as the line and advance the current position
+    #         line = appended_line
+    #         pos = next_pos
 
 
 # ------------------------------
@@ -200,28 +216,28 @@ launch = True
 changed = False
 
 # Open the book file
-ebook = open(text_file, "r")
-if len(state["offsets"]) > state["current_page"]:
-    ebook.seek(state["offsets"][state["current_page"]])
-else:
-    state["current_page"] = 0
-    state["offsets"] = []
+quotes = open(text_file, "r")
+# go through and readline up to current state:
+for i in range(state["current_quote"]):
+    quotes.readline()
 
 while True:
     # Was the next page button pressed?
     if display.pressed(badger2040.BUTTON_DOWN):
-        state["current_page"] += 1
+        state["current_quote"] += 1
 
         changed = True
 
     # Was the previous page button pressed?
     if display.pressed(badger2040.BUTTON_UP):
-        if state["current_page"] > 0:
-            state["current_page"] -= 1
-            if state["current_page"] == 0:
-                ebook.seek(0)
+        if state["current_quote"] > 0:
+            state["current_quote"] -= 1
+            if state["current_quote"] == 0:
+                quotes.seek(0)
             else:
-                ebook.seek(state["offsets"][state["current_page"] - 1])  # Retrieve the start position of the last page
+                quotes.seek(0)
+                for i in range(state["current_quote"]):
+                    quotes.readline() # Go back to the line.
             changed = True
 
     if display.pressed(badger2040.BUTTON_A):
@@ -230,7 +246,7 @@ while True:
             state["text_size"] = 0.5
         text_spacing = int(34 * state["text_size"])
         state["offsets"] = []
-        ebook.seek(0)
+        quotes.seek(0)
         state["current_page"] = 0
         changed = True
 
@@ -239,13 +255,13 @@ while True:
         if (state["font_idx"] >= len(FONTS)):
             state["font_idx"] = 0
         state["offsets"] = []
-        ebook.seek(0)
+        quotes.seek(0)
         state["current_page"] = 0
         changed = True
 
     if launch and not changed:
         if state["current_page"] > 0 and len(state["offsets"]) > state["current_page"] - 1:
-            ebook.seek(state["offsets"][state["current_page"] - 1])
+            quotes.seek(state["offsets"][state["current_page"] - 1])
         changed = True
         launch = False
 
@@ -253,9 +269,6 @@ while True:
         draw_frame()
         render_page()
 
-        # Is the next page one we've not displayed before?
-        if state["current_page"] >= len(state["offsets"]):
-            state["offsets"].append(ebook.tell())  # Add its start position to the state["offsets"] list
         badger_os.state_save("ebook", state)
 
         changed = False
