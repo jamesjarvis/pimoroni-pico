@@ -107,7 +107,7 @@ def render_page():
     lines = []
     display.font(FONTS[state["font_idx"]])
 
-    current_quote_json = json.load(quotes.readline())
+    current_quote_json = json.loads(quotes.readline())
     # Read a full line and split it into words.
     words = current_quote_json["content"].split(" ")
 
