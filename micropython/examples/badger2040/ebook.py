@@ -324,7 +324,7 @@ text_spacing = int(34 * TEXT_SIZE)
 # Create a new Badger and set it to update FAST
 display = badger2040.Badger2040()
 display.led(128)
-display.update_speed(badger2040.UPDATE_FAST)
+display.update_speed(badger2040.UPDATE_NORMAL)
 
 
 def display_random_quote():
