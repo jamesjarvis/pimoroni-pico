@@ -280,6 +280,8 @@ import badger2040
 import gc
 import badger_os
 import json
+import time
+import random
 
 
 # LETS START FROM SCRATCH
