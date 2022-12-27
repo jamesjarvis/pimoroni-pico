@@ -39,7 +39,6 @@ convert_image(usermod_badger2040 badge_image)
 convert_image(usermod_badger2040 badgerpunk)
 convert_image(usermod_badger2040 launchericons)
 
-convert_raw(usermod_badger2040 289-0-wind-in-the-willows-abridged.txt witw)
 convert_raw(usermod_badger2040 quotes.txt quotes)
 
 copy_module(usermod_badger2040 ${CMAKE_CURRENT_LIST_DIR}/assets/boot.py boot)
