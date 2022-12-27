@@ -44,7 +44,7 @@ icons_width = 576
 examples = [
     ("_clock", 0),
     ("_fonts", 1),
-    ("_ebook", 2),
+    ("_quotes", 2),
     ("_image", 3),
     ("_list", 4),
     ("_badge", 5),

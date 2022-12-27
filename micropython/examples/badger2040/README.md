@@ -9,7 +9,7 @@
   - [Badge](#badge)
   - [Checklist](#checklist)
   - [Clock](#clock)
-  - [E-Book](#e-book)
+  - [Quotes](#quotes)
   - [Fonts](#fonts)
   - [Image](#image)
   - [QR gen](#qr-gen)
@@ -64,10 +64,10 @@ A checklist application, letting you navigate through items and tick each of the
 
 A simple clock showing the time and date, that uses the E Ink's fast speed to update every second.
 
-### E-Book
-[ebook.py](ebook.py)
+### Quotes
+[quotes.py](quotes.py)
 
-A mini text file e-reader. Comes pre-loaded with an excerpt of The Wind In the Willows.
+Displays a random quote. Comes preloaded with 2040+ quotes from goodreads.
 
 ### Fonts
 [fonts.py](fonts.py)
