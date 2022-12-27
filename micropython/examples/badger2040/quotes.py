@@ -31,7 +31,7 @@ WIDTH = badger2040.WIDTH
 HEIGHT = badger2040.HEIGHT
 
 TEXT_PADDING = 4
-TEXT_WIDTH = WIDTH - TEXT_PADDING - TEXT_PADDING - (TEXT_PADDING * 4)
+TEXT_WIDTH = WIDTH - TEXT_PADDING - TEXT_PADDING
 TEXT_SIZE = 0.55
 
 FONT = "sans"
@@ -61,7 +61,7 @@ def display_random_quote():
     lines = []
     latest_line = ""
     for word in words:
-        latest_line_length = display.measure_text(latest_line, TEXT_SIZE)
+        latest_line_length = display.measure_text(latest_line + word, TEXT_SIZE)
         if latest_line_length >= TEXT_WIDTH:
             lines.append(latest_line)
             latest_line = ""
