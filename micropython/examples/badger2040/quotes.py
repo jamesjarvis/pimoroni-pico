@@ -15,12 +15,12 @@ except OSError:
     try:
         # If the specified file doesn't exist,
         # pre-populate with Quotes.
-        import quotes
+        import quoteslist
         with open(text_file, "wb") as f:
-            f.write(quotes.data())
+            f.write(quoteslist.data())
             f.flush()
             time.sleep(0.1)
-        del quotes
+        del quoteslist
     except ImportError:
         pass
 
@@ -38,16 +38,16 @@ FONT = "sans"
 FONT_THICKNESS = 2
 
 text_spacing = int(34 * TEXT_SIZE)
-# Create a new Badger and set it to update NORMAL.
+# Create a new Badger and set it to update MEDIUM.
 display = badger2040.Badger2040()
 display.led(128)
-display.update_speed(badger2040.UPDATE_NORMAL)
+display.update_speed(badger2040.UPDATE_MEDIUM)
 
 
 def display_random_quote():
     display.pen(15)
     display.clear()
-    # Open the book file.
+    # Open the quotes file.
     quotes = open(text_file, "r")
 
     n = random.randint(0, TOTAL_QUOTES)

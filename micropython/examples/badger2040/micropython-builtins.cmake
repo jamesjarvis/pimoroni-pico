@@ -39,7 +39,7 @@ convert_image(usermod_badger2040 badge_image)
 convert_image(usermod_badger2040 badgerpunk)
 convert_image(usermod_badger2040 launchericons)
 
-convert_raw(usermod_badger2040 quotes.txt quotes)
+convert_raw(usermod_badger2040 quotes.txt quoteslist)
 
 copy_module(usermod_badger2040 ${CMAKE_CURRENT_LIST_DIR}/assets/boot.py boot)
 copy_module(usermod_badger2040 ${CMAKE_CURRENT_LIST_DIR}/launcher.py _launcher)
