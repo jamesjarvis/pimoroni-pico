@@ -23,6 +23,7 @@ This repository contains the C/C++ and MicroPython libraries for our range of RP
   - [Breakouts](#breakouts)
   - [Kits](#kits)
 - [Tutorials and Guides](#tutorials-and-guides)
+- [Specific instructions for jamesjarvis/pimoroni-pico](#specific-instructions-for-jamesjarvispimoroni-pico)
 
 # MicroPython
 
@@ -152,3 +153,12 @@ We also maintain a C++/CMake boilerplate with GitHub workflows configured for te
 - :link: [Getting Started with Inky Frame](https://learn.pimoroni.com/article/getting-started-with-inky-frame)
 - :link: [Getting Started with Automation 2040 W (and Mini)](https://learn.pimoroni.com/article/getting-started-with-automation-2040-w)
 - :link: [Assembling Wireless Plasma Kit](https://learn.pimoroni.com/article/assembling-wireless-plasma-kit)
+
+# Specific instructions for jamesjarvis/pimoroni-pico
+
+To provision this release onto the badger2040:
+
+1. Build a new version of this repo, and extract the 'pico' .uf2 (similar to instructions on https://learn.pimoroni.com/article/getting-started-with-pico )
+2. To copy this file to your Pico, you'll need to put it into bootloader mode. To do this, hold down the BOOTSEL button whilst plugging the USB cable into your computer - it should now show up as a drive called RPI-RP2
+3. Copy the downloaded .uf2 file across to this new drive. Your Pico will now reboot.
+4. 
